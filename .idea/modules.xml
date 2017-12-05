@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MapHack.iml" filepath="$PROJECT_DIR$/MapHack.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\kosta\android\MapHack\app\app.iml" filepath="C:\Users\kosta\android\MapHack\app\app.iml" />
-      <module fileurl="file://C:\Users\kosta\android\MapHack\maphack.iml" filepath="C:\Users\kosta\android\MapHack\maphack.iml" />
+      <module fileurl="file://$USER_HOME$/android/MapHack/app/app.iml" filepath="$USER_HOME$/android/MapHack/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/maphack.iml" filepath="$PROJECT_DIR$/maphack.iml" />
+      <module fileurl="file://$USER_HOME$/android/MapHack/maphack.iml" filepath="$USER_HOME$/android/MapHack/maphack.iml" />
     </modules>
   </component>
 </project>
