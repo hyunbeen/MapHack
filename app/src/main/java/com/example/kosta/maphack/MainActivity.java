@@ -16,29 +16,36 @@ public class MainActivity extends TabActivity{
         super.onCreate(savedInstanceState); /*맵핵 프로젝트 시작*/
         setContentView(R.layout.activity_main);
 
+        Intent intent;
         TabHost tabHost = getTabHost();
 
-        TabHost.TabSpec tabSpecTab1 = tabHost.newTabSpec("TAB1").setIndicator("",getResources().getDrawable(R.drawable.logo));
-        tabSpecTab1.setContent(R.id.tab1);
+        intent = new Intent().setClass(this, TabHomeActivity.class);
+
+        TabHost.TabSpec tabSpecTab1 = tabHost.newTabSpec("TAB1").setIndicator("",getResources().getDrawable(R.drawable.home));
+        tabSpecTab1.setContent(intent);
         tabHost.addTab(tabSpecTab1);
 
-        TabHost.TabSpec tabSpecTab2 = tabHost.newTabSpec("TAB2").setIndicator("고양이");
-        tabSpecTab2.setContent(R.id.tab2);
+        intent = new Intent().setClass(this, TabMapActivity.class);
+        TabHost.TabSpec tabSpecTab2 = tabHost.newTabSpec("TAB2").setIndicator("",getResources().getDrawable(R.drawable.map));
+        tabSpecTab2.setContent(intent);
         tabHost.addTab(tabSpecTab2);
 
-        TabHost.TabSpec tabSpecTab3 = tabHost.newTabSpec("TAB3").setIndicator("토끼");
-        tabSpecTab3.setContent(R.id.tab3);
+        intent = new Intent().setClass(this, TabListActivity.class);
+        TabHost.TabSpec tabSpecTab3 = tabHost.newTabSpec("TAB3").setIndicator("",getResources().getDrawable(R.drawable.view));
+        tabSpecTab3.setContent(intent);
         tabHost.addTab(tabSpecTab3);
 
-        TabHost.TabSpec tabSpecTab4 = tabHost.newTabSpec("TAB4").setIndicator("말");
-        tabSpecTab4.setContent(R.id.tab4);
+        intent = new Intent().setClass(this, TabAlarmActivity.class);
+        TabHost.TabSpec tabSpecTab4 = tabHost.newTabSpec("TAB4").setIndicator("",getResources().getDrawable(R.drawable.alarm));
+        tabSpecTab4.setContent(intent);
         tabHost.addTab(tabSpecTab4);
 
-        TabHost.TabSpec tabSpecTab5 = tabHost.newTabSpec("TAB5").setIndicator("현빈");
-        tabSpecTab5.setContent(R.id.tab5);
+        intent = new Intent().setClass(this, TabSettingActivity.class);
+        TabHost.TabSpec tabSpecTab5 = tabHost.newTabSpec("TAB5").setIndicator("",getResources().getDrawable(R.drawable.setting));
+        tabSpecTab5.setContent(intent);
         tabHost.addTab(tabSpecTab5);
 
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(2);
 
     }
 

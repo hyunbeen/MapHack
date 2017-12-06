@@ -24,6 +24,11 @@
         <activity android:name=".MainActivity">
 
         </activity>
+        <activity android:name=".TabHomeActivity"></activity>
+        <activity android:name=".TabMapActivity"></activity>
+        <activity android:name=".TabAlarmActivity"></activity>
+        <activity android:name=".TabSettingActivity"></activity>
+        <activity android:name=".TabListActivity"></activity>
     </application>
 
 </manifest>
