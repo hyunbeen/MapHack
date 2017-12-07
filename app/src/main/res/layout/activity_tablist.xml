@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+   <android.support.v4.view.ViewPager
+       android:id="@+id/viewPager"
+       android:layout_width="match_parent"
+       android:layout_height="65dp"
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentStart="true"
+       android:layout_marginBottom="169dp"></android.support.v4.view.ViewPager>
 
-    </ListView>
+   <ListView
+       android:id="@+id/listview"
+       android:layout_width="match_parent"
+       android:layout_height="455dp"
+       android:visibility="visible" />
+
+   <LinearLayout
+       android:id="@+id/linearLayout"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:orientation="vertical"
+       android:visibility="gone"
+       android:weightSum="1">
+
+      <WebView
+          android:id="@+id/webView"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_weight="0.97"
+          android:scaleType="fitXY" />
+
+      <Button
+          android:id="@+id/btnBack"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="이전으로" />
+   </LinearLayout>
 </LinearLayout>
