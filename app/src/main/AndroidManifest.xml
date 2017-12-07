@@ -38,9 +38,7 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".MainActivity">
-
-        </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity android:name=".TabHomeActivity"></activity>
         <activity android:name=".TabMapActivity"></activity>
         <activity android:name=".TabAlarmActivity"></activity>
