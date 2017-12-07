@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.widget.TabHost;
 
-public class MainActivity extends TabActivity{
+public class MainActivity extends TabActivity {
     TabHost mTab;
 
     @Override
