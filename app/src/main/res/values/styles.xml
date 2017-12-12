@@ -8,4 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="StartTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+        <item name="android:background">@drawable/start</item>
+    </style>
 </resources>

@@ -38,12 +38,13 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" android:configChanges="orientation|screenSize"></activity>
         <activity android:name=".TabHomeActivity"></activity>
         <activity android:name=".TabMapActivity"></activity>
         <activity android:name=".TabAlarmActivity"></activity>
         <activity android:name=".TabSettingActivity"></activity>
         <activity android:name=".TabListActivity"></activity>
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

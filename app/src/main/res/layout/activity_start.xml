@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#57cbcc">
+    android:background="#29293a"
+    android:gravity="center">
 
     <ImageView
+        android:layout_marginTop="-120dp"
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
