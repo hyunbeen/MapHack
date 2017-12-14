@@ -29,7 +29,7 @@ public class TabHomeActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("다시시작해랏", "ㅁㅈㄷㄹ");
+        Log.d("다시시작해랏", "ㅁㅈㄷㄹ123");
         helper = new DBHelper(this);
 
         try{
