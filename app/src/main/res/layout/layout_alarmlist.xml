@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="200dp"
+        android:layout_width="170dp"
         android:layout_height="80dp"
         android:layout_weight="1"
         android:layout_marginBottom="5dp"
@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/alarmdown"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
             android:text="TextView"
             />

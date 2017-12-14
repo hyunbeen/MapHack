@@ -354,6 +354,13 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
         listView.setAdapter(mapSearchAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("position", ""+position);
+            }
+        });
+
         searchbtn = (Button)findViewById(R.id.searchbtn);
         searchbtn.setOnClickListener(new View.OnClickListener() {
             @Override

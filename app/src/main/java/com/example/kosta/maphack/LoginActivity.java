@@ -85,7 +85,7 @@ public class LoginActivity extends Activity {
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
 
 // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.125:8080/MapHack/androidloginconfirm.mh");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.100:8080/MapHack/androidloginconfirm.mh");
 
 // Parameter 를 전송한다.
 

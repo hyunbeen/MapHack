@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
@@ -52,15 +53,14 @@ public class MapSearchAdapter extends ArrayAdapter<MapSearch>{
             TextView tvUp = (TextView) itemView.findViewById(R.id.tvUp);
             TextView tvDown = (TextView) itemView.findViewById(R.id.tvDown);
 
-            if(item.getImage().equals("http://api.visitkorea.or.kr/static/images/common/noImage.gif")){
-                img.setInitialScale(200);
-            }else{
-                img.setInitialScale(80);
-            }
+            img.loadDataWithBaseURL(null, creHtmlBody(item.getImage()), "text/html", "utf-8", null);
+
             img.setHorizontalScrollBarEnabled(false);
             img.setWebViewClient(new WebViewClient());
+            img.setClickable(false);
+            img.setFocusable(false);
 
-            img.loadUrl(item.getImage());
+            //img.loadUrl(item.getImage());
             tvUp.setText(item.getTitle());
             tvDown.setText(item.getDescription());
 
@@ -69,4 +69,15 @@ public class MapSearchAdapter extends ArrayAdapter<MapSearch>{
         //return super.getView(position, convertView, parent);
         return itemView;
     }
+    public  String creHtmlBody(String imagUrl){
+        StringBuffer sb = new StringBuffer("<HTML>");
+        sb.append("<HEAD>");
+        sb.append("</HEAD>");
+        sb.append("<BODY style='margin:0; padding:0; text-align:center;'>");    //중앙정렬
+        sb.append("<img width='100%' height='100%' src=\"" + imagUrl+"\">"); //가득차게 나옴
+        sb.append("</BODY>");
+        sb.append("</HTML>");
+        return sb.toString();
+    }
+
 }

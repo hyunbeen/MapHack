@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -42,6 +43,7 @@ public class TabAlarmActivity extends Activity {
     AlarmListAdapter alarmListAdapter;
 
     List<String> alarm = new ArrayList<>();
+    List<String> alarmtitle = new ArrayList<>();
 
     DBHelper helper;
     SQLiteDatabase db;
@@ -57,11 +59,13 @@ public class TabAlarmActivity extends Activity {
     int count;
     int countlist[];
 
-    String stYear[];
-    String stMonth[];
-    String stDay[];
-    String stHour[];
-    String stMinute[];
+    int stYear[];
+    int stMonth[];
+    int stDay[];
+    int stHour[];
+    int stMinute[];
+
+    String inputtitle[];
 
     @Override
     protected void onResume() {
@@ -89,6 +93,7 @@ public class TabAlarmActivity extends Activity {
             Log.d("id", id);
 
             alarm.clear();
+            alarmtitle.clear();
 
             TourTask tourTask = new TourTask();
 
@@ -109,34 +114,7 @@ public class TabAlarmActivity extends Activity {
 
 
     }
-    public class AlarmHATT {
-        private Context context;
 
-        public AlarmHATT(Context context) {
-
-            this.context = context;
-        }
-
-        public void Alarm(int count) {
-            // Log.d("븐", ""+a);
-            PendingIntent[] sender = new PendingIntent[count];
-
-            for(int i=0; i < count; i++){
-                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent intent = new Intent(TabAlarmActivity.this, BroadcastD.class);
-                sender[i] = PendingIntent.getBroadcast(TabAlarmActivity.this, i, intent, 0);
-                Calendar calendar = Calendar.getInstance();
-                //알람시간 calendar에 set해주기
-
-                calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 17, i+36, 0);
-                Log.d("calendar", calendar.get(Calendar.MONTH)+ ";"+calendar.get(Calendar.DATE));
-                //알람 예약
-                am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender[i]);
-            }
-
-
-        }
-    }
     public class TourTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
@@ -193,6 +171,12 @@ public class TabAlarmActivity extends Activity {
 
                 countlist = new int[detaillist.length];
 
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmm");
+
+                String datetime1 = sdf1.format(calendar.getTime());
+
+
                 for (int i=0; i<detaillist.length; i++){
                     count = 0;
                     Log.d("길이", ""+detaillist.length);
@@ -204,14 +188,35 @@ public class TabAlarmActivity extends Activity {
                         for(int k=0; k<jsonArray.length(); k++){
 
                             JSONObject jsonObject1 = jsonArray.getJSONObject(k);
-                            Log.d("알람", i+" "+k+" "+jsonObject1.getString("time"));
-                            alarm.add(jsonObject1.getString("time"));
-                            count++;
+                            Log.d("알람123", i+" "+k+" "+jsonObject1.getString("time"));
+                            String y;
+                            String dm;
+                            String d;
+                            String h;
+                            String m;
+                            StringTokenizer stringTokenizer = new StringTokenizer(jsonObject1.getString("time"), "-");
+                                y = stringTokenizer.nextToken();
+                                dm = stringTokenizer.nextToken();
+                                d = stringTokenizer.nextToken();
+                                h = stringTokenizer.nextToken();
+                                m = stringTokenizer.nextToken();
+                                String datetime2 = y+dm+d+h+m;
+
+
+                            if (Long.parseLong(datetime1) < Long.parseLong(datetime2)){
+
+                                alarm.add(jsonObject1.getString("time"));
+                                alarmtitle.add(jsonObject1.getString("title"));
+                                count++;
+
+                            }
+
                         }
                     }
                     Log.d("count", ""+count);
                     countlist[i] = count;
                     Log.d("countlist", ""+countlist[i]);
+
                 }
                 for(int i=0; i<alarm.size(); i++){
                     Log.d("알람", alarm.get(i));
@@ -228,7 +233,10 @@ public class TabAlarmActivity extends Activity {
 
 
                 for (int i=0; i<totaltitle.length; i++){
-                    alarmListAdapter.add(new AlarmList(totaltitle[i], "등록된 알림 "+countlist[i]+" 개", R.drawable.alarm));
+                    if(countlist[i] != 0){
+                        alarmListAdapter.add(new AlarmList(totaltitle[i], "등록된 알림 "+countlist[i]+" 개", R.drawable.alarmlist));
+                    }
+
                 }
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -240,26 +248,72 @@ public class TabAlarmActivity extends Activity {
                 });
 
 
-                stYear = new String[alarm.size()];
-                stMonth = new String[alarm.size()];
-                stDay = new String[alarm.size()];
-                stHour = new String[alarm.size()];
-                stMinute = new String[alarm.size()];
+                stYear = new int[alarm.size()];
+                stMonth = new int[alarm.size()];
+                stDay = new int[alarm.size()];
+                stHour = new int[alarm.size()];
+                stMinute = new int[alarm.size()];
 
                 for(int i=0; i< alarm.size(); i++){
                     StringTokenizer stringTokenizer = new StringTokenizer(alarm.get(i), "-");
                     if(stringTokenizer.hasMoreTokens()){
-                        stYear[i] = stringTokenizer.nextToken();
-                        stMonth[i] = stringTokenizer.nextToken();
-                        stDay[i] = stringTokenizer.nextToken();
-                        stHour[i] = stringTokenizer.nextToken();
-                        stMinute[i] = stringTokenizer.nextToken();
+                        stYear[i] = Integer.parseInt(stringTokenizer.nextToken());
+                        stMonth[i] = Integer.parseInt(stringTokenizer.nextToken());
+                        stDay[i] = Integer.parseInt(stringTokenizer.nextToken());
+                        stHour[i] = Integer.parseInt(stringTokenizer.nextToken());
+                        stMinute[i] = Integer.parseInt(stringTokenizer.nextToken());
                     }
-                    Log.d("날짜", stYear[i] + stMonth[i] + stDay[i]);
+
                 }
-                //new AlarmHATT(getApplicationContext()).Alarm(alarm.size());
+
+                inputtitle = new String[alarm.size()];
+
+                new AlarmHATT(getApplicationContext()).Alarm(alarm.size());
+
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+
+
+        }
+    }
+    public class AlarmHATT {
+        private Context context;
+
+        public AlarmHATT(Context context) {
+
+            this.context = context;
+        }
+        int last = 0;
+        int first = 0;
+
+        public void Alarm(int count) {
+            // Log.d("븐", ""+a);
+            PendingIntent[] sender = new PendingIntent[count];
+            for(int i=0; i<countlist.length; i++){
+                last += countlist[i];
+
+                for(int j=first; j<last; j++){
+                    inputtitle[j] = totaltitle[i];
+                    Log.d("타이틀넣기"+j+"번째 ", inputtitle[j]);
+                }
+
+                first += countlist[i];
+            }
+            for(int i=0; i < count; i++){
+                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+                Intent intent = new Intent(TabAlarmActivity.this, BroadcastD.class);
+                intent.putExtra("title", inputtitle[i]);
+                intent.putExtra("content", "일정 '"+alarmtitle.get(i)+"' 알람입니다.");
+                sender[i] = PendingIntent.getBroadcast(TabAlarmActivity.this, i, intent, 0);
+
+                Calendar calendar = Calendar.getInstance();
+                //알람시간 calendar에 set해주기
+
+                calendar.set(stYear[i], stMonth[i]-1, stDay[i], stHour[i], stMinute[i]);
+                Log.d("calendar", calendar.get(Calendar.MONTH)+ ";"+calendar.get(Calendar.DATE)+";"+calendar.get(Calendar.HOUR));
+                //알람 예약
+                am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender[i]);
             }
 
 
