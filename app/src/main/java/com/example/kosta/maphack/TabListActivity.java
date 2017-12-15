@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +18,10 @@ import android.widget.Toast;
 import com.example.kosta.maphack.adapter.AfterAdapter;
 import com.example.kosta.maphack.model.After;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,14 +29,19 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import in.srain.cube.views.GridViewWithHeaderAndFooter;
+
+import static java.lang.String.valueOf;
+
 /**
  * Created by kosta on 2017-12-06.
  */
 
 public class TabListActivity extends Activity {
+    List<JSONObject> travelList = new ArrayList();
     ViewPager viewPager;
 
-    ListView lv;
+    GridViewWithHeaderAndFooter lv;
 
     List<After> list;
     AfterAdapter adapter;
@@ -65,15 +75,13 @@ public class TabListActivity extends Activity {
         timer.scheduleAtFixedRate(new MyTimerTask(),10000,10000);
 
 
-       lv=(ListView)findViewById(R.id.listview);
+        lv=(GridViewWithHeaderAndFooter) findViewById(R.id.listview);
 
         list = new ArrayList<After>();
 
         adapter = new AfterAdapter(this, R.layout.activity_afteritem, list);
-        //footer
-        View footerView = getLayoutInflater().inflate(R.layout.activity_tablistfooter,null);
-        lv.addFooterView(footerView);
-        btnNext = (Button)footerView.findViewById(R.id.btnNext);
+
+
 
         lv.setAdapter(adapter);
         linearLayout = (LinearLayout)findViewById(R.id.linearLayout);
@@ -83,16 +91,19 @@ public class TabListActivity extends Activity {
         linearLayout.setVisibility(View.GONE);
 
 
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),"헬로 길게", Toast.LENGTH_LONG).show();
 
 
                 After item = adapter.getItem(i);
-                webView.setTag(item.getAft_html());
+
                 lv.setVisibility(View.GONE);
                 linearLayout.setVisibility(View.VISIBLE);
+                webView.setHorizontalScrollBarEnabled(false);
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl("http://192.168.0.121:8080/MapHack/afterDetailed.mh?id="+item.getAft_id());
 
             }
         });
@@ -132,37 +143,42 @@ public class TabListActivity extends Activity {
         }
     }
 
-    /*private void addData() {
-        //adapter.add(new Flower("제목", "내용", R.drawable.flower01, false));
-        adapter.add(new Flower("고구마꽃",
-                "행운", R.drawable.flower01, false));
-        adapter.add(new Flower("국화꽃",
-                "성실, 청초, 고상함 [빨강,자홍색]사랑, [흰색]순결 [황색]질투", R.drawable.flower02, false));
-        adapter.add(new Flower("대나무꽃",
-                "지조, 인내, 절개, 절정", R.drawable.flower03, false));
-        adapter.add(new Flower("동자꽃",
-                "기다림", R.drawable.flower04, false));
-        adapter.add(new Flower("백합꽃",
-                "[빨간색] 열정, 깨끗함, [주황색] 명랑한 사랑, [노란색] 유쾌, [분홍색] 사랑의 맹세, [흰색] 순수한 사랑, 순결",
-                R.drawable.flower05, false));
-        adapter.add(new Flower("소나무꽃",
-                "불로장수, 불로장생, 용감", R.drawable.flower06, false));
-        adapter.add(new Flower("솔체꽃",
-                "이루어 질 수없는 사랑", R.drawable.flower07, false));
-        adapter.add(new Flower("양귀비꽃",
-                "[빨강]위로, [흰색]망각", R.drawable.flower08, false));
-        adapter.add(new Flower("은방울꽃",
-                "섬세함", R.drawable.flower09, false));
-        adapter.add(new Flower("장미",
-                "[노랑색]질투, 완벽한 성취, [흰색] 순결, 순진, 매력, [빨강색] 욕망, 열정, 기쁨, [파랑색] 기적, [핑크색] 맹세, 행복한 사랑",
-                R.drawable.flower10, false));
-        adapter.add(new Flower("찔레꽃",
-                "고독, 신중한 사랑, 가족에 대한 그리움", R.drawable.flower11, false));
-        adapter.add(new Flower("투구꽃",
-                "밤의 열림", R.drawable.flower12, false));
-        adapter.add(new Flower("해바라기",
-                "애모, 아름다운 빛, 그리움, 기다림, 숭배", R.drawable.flower13, false));
-    }*/
+    private void addData() {
+        JSONArray jrr = new JSONArray();
+        JSONObject jobj = new JSONObject();
+        String mainimg = "";
+        String title = "";
+        String id = "";
+        try {
+            for(int i=0;i<travelList.size();i++){
+                jrr = travelList.get(i).getJSONArray("imageList");
+                if(jrr.length()==0){
+                    mainimg = "";
+                }else{
+                    jobj = (JSONObject) jrr.get(0);
+                    mainimg = valueOf(jobj.get("fileName"));
+                }
+
+
+                title = valueOf(travelList.get(i).get("title"));
+                id = valueOf(travelList.get(i).get("_id"));
+                Log.d("TRAVEL_TITLE",title);
+                Log.d("TRAVEL_MAINIMG",mainimg);
+                Log.d("TRAVEL_id",id);
+                adapter.add(new After(mainimg,title,id));
+            }
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+    }
+
     public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
@@ -190,8 +206,27 @@ public class TabListActivity extends Activity {
 
         @Override
         protected void onPostExecute(String s) {
-            Log.d("JSON_REUSLT", s);
+            try {
+
+                Log.d("초기시작",s);
+                JSONObject obj = new JSONObject(s);
+
+                JSONArray jar   = obj.getJSONArray("result");
+                Log.d("길이", String.valueOf(jar.length()));
+                for(int i=0;i<jar.length();i++){
+                    Log.d("들어감","들어감");
+                    JSONObject objdetail = jar.getJSONObject(i);
+                    travelList.add(objdetail);
+
+                }
+                addData();
+            } catch (JSONException e) {
+
+            }
+
+
         }
     }
+
 
 }

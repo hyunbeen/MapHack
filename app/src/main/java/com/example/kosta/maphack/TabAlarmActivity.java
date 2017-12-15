@@ -44,6 +44,10 @@ public class TabAlarmActivity extends Activity {
 
     List<String> alarm = new ArrayList<>();
     List<String> alarmtitle = new ArrayList<>();
+    List<String> alarmdetailcontent = new ArrayList<>();
+    List<String> alarmdetailimage = new ArrayList<>();
+    List<Integer> alarmdetailcount = new ArrayList<>();
+
 
     DBHelper helper;
     SQLiteDatabase db;
@@ -55,6 +59,7 @@ public class TabAlarmActivity extends Activity {
     String alarmlist;
     String detaillist[];
     String totaltitle[];
+    String totalimage[];
 
     int count;
     int countlist[];
@@ -160,15 +165,21 @@ public class TabAlarmActivity extends Activity {
 
                 detaillist = new String[array.length()];
                 totaltitle = new String[array.length()];
+                totalimage = new String[array.length()];
 
                 for(int i=0; i<array.length(); i++){
                     JSONObject jsonObject = array.getJSONObject(i);
                     detaillist[i] = jsonObject.getString("dayList");
                     totaltitle[i] = jsonObject.getString("map_title");
+                    totalimage[i] = jsonObject.getString("map_fname");
                     Log.d("dayList", detaillist[i]);
                     Log.d("map_title", totaltitle[i]);
                 }
 
+                for(int i=0; i<totalimage.length; i++){
+                    totalimage[i] = "http://192.168.0.100:8080"+totalimage[i];
+                    Log.d("totalimage", totalimage[i]);
+                }
                 countlist = new int[detaillist.length];
 
                 Calendar calendar = Calendar.getInstance();
@@ -207,6 +218,8 @@ public class TabAlarmActivity extends Activity {
 
                                 alarm.add(jsonObject1.getString("time"));
                                 alarmtitle.add(jsonObject1.getString("title"));
+                                alarmdetailcontent.add(jsonObject1.getString("content"));
+                                alarmdetailimage.add(jsonObject1.getString("firstimage"));
                                 count++;
 
                             }
@@ -219,7 +232,10 @@ public class TabAlarmActivity extends Activity {
 
                 }
                 for(int i=0; i<alarm.size(); i++){
-                    Log.d("알람", alarm.get(i));
+                    Log.d("알람시간", alarm.get(i));
+                    Log.d("알람제목", alarmtitle.get(i));
+                    Log.d("알람내용", alarmdetailcontent.get(i));
+                    Log.d("알람이미지", alarmdetailimage.get(i));
                 }
 
 
@@ -230,11 +246,13 @@ public class TabAlarmActivity extends Activity {
 
                 listView.setAdapter(alarmListAdapter);
 
-
+                alarmdetailcount.clear();
 
                 for (int i=0; i<totaltitle.length; i++){
                     if(countlist[i] != 0){
-                        alarmListAdapter.add(new AlarmList(totaltitle[i], "등록된 알림 "+countlist[i]+" 개", R.drawable.alarmlist));
+                        alarmListAdapter.add(new AlarmList(totaltitle[i], "등록된 알림 "+countlist[i]+" 개", totalimage[i]));
+                        alarmdetailcount.add(countlist[i]);
+
                     }
 
                 }
@@ -244,6 +262,20 @@ public class TabAlarmActivity extends Activity {
 
 
                         Log.d("position", ""+position);
+                        for(int i=0; i<alarmdetailcount.size(); i++){
+                            Log.d("countlist123123", ""+alarmdetailcount.get(i));
+                        }
+
+                        Intent intent = new Intent(TabAlarmActivity.this, DetailAlarmActivity.class);
+                        intent.putExtra("position", position);
+                        intent.putIntegerArrayListExtra("count", (ArrayList<Integer>) alarmdetailcount);
+                        intent.putStringArrayListExtra("alarm", (ArrayList<String>) alarm);
+                        intent.putStringArrayListExtra("alarmtitle", (ArrayList<String>) alarmtitle);
+                        intent.putStringArrayListExtra("alarmdetailcontent", (ArrayList<String>) alarmdetailcontent);
+                        intent.putStringArrayListExtra("alarmdetailimage", (ArrayList<String>) alarmdetailimage);
+
+                        TabAlarmActivity.this.startActivity(intent);
+
                     }
                 });
 

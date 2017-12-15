@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -48,34 +50,28 @@ public class AfterAdapter extends ArrayAdapter<After> {
             //한줄 아이템 xml 파일을 읽어서 메모리 객체과정 => inflation
             itemView =  this.activity.getLayoutInflater().inflate(this.resource, null);
         }
-        final After item1 = getItem(2*position);
-        final After item2 = getItem(2*position+1);
-        if(item1 != null){
-            ImageView img1 = (ImageView)itemView.findViewById(R.id.img1);
-            ImageView img2 = (ImageView)itemView.findViewById(R.id.img2);
-            final TextView afterTitle1 = (TextView)itemView.findViewById(R.id.AfterTitle1);
-            final TextView afterTitle2 = (TextView)itemView.findViewById(R.id.AfterTitle2);
+        final After item1 = getItem(position);
 
-            try {
-                String imageUrl = "";
-                String imageUrl2 = "";
-                imageUrl = "http://localhost:8080/MapHack/upload/Koala.jpg";
-                imageUrl2 = "http://localhost:8080/MapHack/upload/Koala.jpg";
-                /*imageUrl = "http://localhost:8080/MapHack/upload/"+item1.getAft_image();
-                imageUrl2 ="http://localhost:8080/MapHack/upload/"+item2.getAft_image();*/
-                URL url = new URL(imageUrl);
-                Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                img1.setImageBitmap(bmp);
-                URL url2 = new URL(imageUrl2);
-                Bitmap bmp2 = BitmapFactory.decodeStream(url2.openConnection().getInputStream());
-                img1.setImageBitmap(bmp2);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if(item1 != null){
+            WebView img1 = (WebView)itemView.findViewById(R.id.img1);
+
+            final TextView afterTitle1 = (TextView)itemView.findViewById(R.id.AfterTitle1);
+
+            String imgurl = "";
+            if(item1.getAft_image().equals("")){
+                imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
+            }else{
+                imgurl = "http://192.168.0.121:8080/MapHack/upload"+item1.getAft_image();
             }
 
+            img1.loadDataWithBaseURL(null, creHtmlBody(imgurl), "text/html", "utf-8", null);
 
+            img1.setHorizontalScrollBarEnabled(false);
+            img1.setWebViewClient(new WebViewClient());
+            img1.setClickable(false);
+            img1.setFocusable(false);
             afterTitle1.setText(item1.getAft_title());
-            afterTitle2.setText(item2.getAft_title());
+
 
 
 
@@ -83,5 +79,15 @@ public class AfterAdapter extends ArrayAdapter<After> {
         }
        /* return super.getView(position, convertView, parent);*/
         return itemView;
+    }
+    public  String creHtmlBody(String imagUrl){
+        StringBuffer sb = new StringBuffer("<HTML>");
+        sb.append("<HEAD>");
+        sb.append("</HEAD>");
+        sb.append("<BODY style='margin:0; padding:0; text-align:center;'>");    //중앙정렬
+        sb.append("<img width='100%' height='100%' src=\"" + imagUrl+"\">"); //가득차게 나옴
+        sb.append("</BODY>");
+        sb.append("</HTML>");
+        return sb.toString();
     }
 }

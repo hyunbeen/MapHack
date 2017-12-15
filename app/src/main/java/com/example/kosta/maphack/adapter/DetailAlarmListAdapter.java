@@ -2,7 +2,6 @@ package com.example.kosta.maphack.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,12 +10,13 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kosta.maphack.R;
-import com.example.kosta.maphack.model.AlarmList;
-import com.example.kosta.maphack.model.MapSearch;
+import com.example.kosta.maphack.model.DetailAlarmList;
 
 import java.util.List;
 
@@ -24,12 +24,12 @@ import java.util.List;
  * Created by kosta on 2017-12-08.
  */
 
-public class AlarmListAdapter extends ArrayAdapter<AlarmList>{
+public class DetailAlarmListAdapter extends ArrayAdapter<DetailAlarmList>{
 
     Activity activity;
     int resource;
 
-    public AlarmListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<AlarmList> objects) {
+    public DetailAlarmListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<DetailAlarmList> objects) {
         super(context, resource, objects);
         this.resource = resource;
         activity = (Activity)context;
@@ -43,12 +43,14 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmList>{
         if(itemView == null){
             itemView =this.activity.getLayoutInflater().inflate(this.resource, null);
         }
-        final AlarmList item = getItem(position);
+        final DetailAlarmList item = getItem(position);
 
         if(item != null){
-            WebView img = (WebView)itemView.findViewById(R.id.imgView);
-            TextView tvUp = (TextView) itemView.findViewById(R.id.alarmup);
-            TextView tvDown = (TextView) itemView.findViewById(R.id.alarmdown);
+            WebView img = (WebView)itemView.findViewById(R.id.detailimgView);
+            TextView tvUp = (TextView) itemView.findViewById(R.id.detailalarmup);
+            TextView tvDown = (TextView) itemView.findViewById(R.id.detailalarmdown);
+            TextView tvDown1 = (TextView)itemView.findViewById(R.id.detailalarmdown1);
+            final CheckBox checkBox = (CheckBox)itemView.findViewById(R.id.checkbox);
 
             img.loadDataWithBaseURL(null, creHtmlBody(item.getImage()), "text/html", "utf-8", null);
 
@@ -59,6 +61,20 @@ public class AlarmListAdapter extends ArrayAdapter<AlarmList>{
 
             tvUp.setText(item.getTitle());
             tvDown.setText(item.getDescription());
+            tvDown1.setText(item.getDescription1());
+
+            checkBox.setChecked(true);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if(isChecked){
+                        item.setCheck(true);
+                    }else{
+                        item.setCheck(false);
+                        Toast.makeText(getContext(), "알람 해제", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
         }
 

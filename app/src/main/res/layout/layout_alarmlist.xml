@@ -6,7 +6,7 @@
     android:layout_marginLeft="10dp"
     android:gravity="center_vertical">
 
-    <ImageView
+    <WebView
         android:id="@+id/imgView"
         android:layout_width="170dp"
         android:layout_height="80dp"
@@ -27,6 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
             android:text="TextView"
             android:textSize="20sp"
 
@@ -34,8 +36,10 @@
         <TextView
             android:id="@+id/alarmdown"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dp"
             android:text="TextView"
             />
 

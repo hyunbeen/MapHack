@@ -8,9 +8,15 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by kosta on 2017-12-06.
@@ -22,7 +28,8 @@ public class TabHomeActivity extends Activity {
     SQLiteDatabase db;
     Cursor cursor;
 
-    Button btnlogout;
+    ListView listView;
+    TextView textView;
 
     String id;
 
@@ -50,77 +57,64 @@ public class TabHomeActivity extends Activity {
 
             id = cursor.getString(1);
             Log.d("id", id);
+
+            listView = (ListView)findViewById(R.id.homelist);
+
+            //데이터를 저장하게 되는 리스트
+            List<String> list = new ArrayList<>();
+
+            //리스트뷰와 리스트를 연결하기 위해 사용되는 어댑터
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_list_item_1, list);
+
+            //리스트뷰의 어댑터를 지정해준다.
+            listView.setAdapter(adapter);
+
+            list.add("\n여행짜기 목록\n");
+            list.add("\n여행후기 목록\n");
+            list.add("\n즐겨찾기 목록\n");
+            list.add("\n회원정보 수정\n");
+            list.add("\n로그아웃\n");
+
+
+            textView = (TextView)findViewById(R.id.idtext);
+            textView.setText("'"+id+"'님 환영합니다♥");
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id1) {
+                    if(position == 0){
+                        Intent intent = new Intent(TabHomeActivity.this, MyTravelActivity.class);
+                        TabHomeActivity.this.startActivity(intent);
+                    }else if(position == 1){
+                        Intent intent = new Intent(TabHomeActivity.this, MyTravelReviewActivity.class);
+                        TabHomeActivity.this.startActivity(intent);
+                    }else if(position == 2){
+                        Intent intent = new Intent(TabHomeActivity.this, MyTravelFavoriteActivity.class);
+                        TabHomeActivity.this.startActivity(intent);
+                    }else if(position == 3){
+
+                    }else if(position == 4){
+                        db.execSQL("DELETE FROM login WHERE id='" + id + "';");
+                        Toast.makeText(getApplicationContext(), "로그아웃완료", Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(TabHomeActivity.this, MainActivity.class);
+
+                        TabHomeActivity.this.startActivity(intent);
+                    }
+                }
+            });
+
         }
 
     }
 
 
-//    @Override
-//    protected void onRestart() {
-//        super.onRestart();
-//
-//                Log.d("다시시작해랏123123", "ㅁㅈㄷㄹ123");
-//        helper = new DBHelper(this);
-//
-//        try{
-//            db = helper.getWritableDatabase();
-//        }
-//        catch (SQLiteException e){
-//            db = helper.getReadableDatabase();
-//        }
-//
-//        cursor = db.rawQuery("SELECT * FROM login;",null);
-//
-//        if(cursor.moveToNext() == false){
-//
-//            Intent intent = new Intent(this, LoginActivity.class);
-//
-//            this.startActivity(intent);
-//        }else{
-//            id = cursor.getString(1);
-//            Log.d("id", id);
-//        }
-//
-//    }
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabhome);
 
-//        helper = new DBHelper(this);
-//
-//        try{
-//            db = helper.getWritableDatabase();
-//        }
-//        catch (SQLiteException e){
-//            db = helper.getReadableDatabase();
-//        }
-//
-//        cursor = db.rawQuery("SELECT * FROM login;",null);
-//
-//        if(cursor.moveToNext() == false){
-//
-//            Intent intent = new Intent(this, LoginActivity.class);
-//
-//            this.startActivity(intent);
-//        }else{
-//            id = cursor.getString(1);
-//            Log.d("id", id);
-//        }
 
-        btnlogout = (Button)findViewById(R.id.btnlogout);
-
-        btnlogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.execSQL("DELETE FROM login WHERE id='" + id + "';");
-                Toast.makeText(getApplicationContext(), "로그아웃완료", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(TabHomeActivity.this, MainActivity.class);
-
-                TabHomeActivity.this.startActivity(intent);
-            }
-        });
 
     }
 }

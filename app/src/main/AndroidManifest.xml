@@ -46,6 +46,10 @@
         <activity android:name=".TabSettingActivity"></activity>
         <activity android:name=".TabListActivity"></activity>
         <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".DetailAlarmActivity"></activity>
+        <activity android:name=".MyTravelActivity"></activity>
+        <activity android:name=".MyTravelReviewActivity"></activity>
+        <activity android:name=".MyTravelFavoriteActivity"></activity>
         <receiver android:name=".BroadcastD"></receiver>
     </application>
 </manifest>
