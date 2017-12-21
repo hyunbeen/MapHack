@@ -15,6 +15,7 @@
         android:layout_marginRight="25dp">
 
     </ListView>
+    <!--뒤로가기버튼을 하단에 고정시키기위함-->
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"

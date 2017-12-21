@@ -33,10 +33,10 @@ public class TabHomeActivity extends Activity {
 
     String id;
 
+    //TabHomeActivity 탭을 눌렀을 시 로그인 확인
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("다시시작해랏", "ㅁㅈㄷㄹ123");
         helper = new DBHelper(this);
 
         try{
@@ -70,6 +70,7 @@ public class TabHomeActivity extends Activity {
             //리스트뷰의 어댑터를 지정해준다.
             listView.setAdapter(adapter);
 
+            //리스트뷰에 내용추가
             list.add("\n여행짜기 목록\n");
             list.add("\n여행후기 목록\n");
             list.add("\n즐겨찾기 목록\n");
@@ -80,21 +81,28 @@ public class TabHomeActivity extends Activity {
             textView = (TextView)findViewById(R.id.idtext);
             textView.setText("'"+id+"'님 환영합니다♥");
 
+            //각 리스트뷰 항목 클릭 시
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id1) {
                     if(position == 0){
                         Intent intent = new Intent(TabHomeActivity.this, MyTravelActivity.class);
+                        intent.putExtra("id", id);
                         TabHomeActivity.this.startActivity(intent);
                     }else if(position == 1){
                         Intent intent = new Intent(TabHomeActivity.this, MyTravelReviewActivity.class);
+                        intent.putExtra("id", id);
                         TabHomeActivity.this.startActivity(intent);
                     }else if(position == 2){
                         Intent intent = new Intent(TabHomeActivity.this, MyTravelFavoriteActivity.class);
+                        intent.putExtra("id", id);
                         TabHomeActivity.this.startActivity(intent);
                     }else if(position == 3){
-
+                        Intent intent = new Intent(TabHomeActivity.this, MyTravelModifyActivity.class);
+                        intent.putExtra("id", id);
+                        TabHomeActivity.this.startActivity(intent);
                     }else if(position == 4){
+                        //로그아웃을 눌렀을 시 내부 디비에 로그인 정보를 삭제한다.
                         db.execSQL("DELETE FROM login WHERE id='" + id + "';");
                         Toast.makeText(getApplicationContext(), "로그아웃완료", Toast.LENGTH_SHORT).show();
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--로그인액티비티에 있는 버튼 스타일지정-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="#FF4081"/>
     <corners android:radius="10dip"/>

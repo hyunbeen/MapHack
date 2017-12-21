@@ -15,6 +15,7 @@ import android.widget.ImageView;
 public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
+    //view page의 이미지 설정
     private Integer [] images = {R.drawable.slider1,R.drawable.slider2,R.drawable.slider3};
 
     public ViewPagerAdapter(Context context){
@@ -34,6 +35,7 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        //slider 하나마다의 viewpage의 설정을 해준다
         layoutInflater = (LayoutInflater)context.getSystemService((context.LAYOUT_INFLATER_SERVICE));
         View view = layoutInflater.inflate(R.layout.activity_custom,null);
         ImageView imageView = (ImageView)view.findViewById(R.id.imageView);
@@ -47,8 +49,11 @@ public class ViewPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
+        //뷰페이지 목록이 삭제 되었을때
         ViewPager vp = (ViewPager)container;
         View view = (View)object;
         vp.removeView(view);
     }
 }
+
+

@@ -116,19 +116,21 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
     LocationManager locationManager;
 
+    //현재 탭에서 다른 탭으로 넘어갔을 때 실시간 사용자위치 검색을 멈춤
     @Override
     protected void onPause() {
         super.onPause();
-        //
-        Log.d("멈춰랏", "ㅁㅈㄷㄹ");
+
         locationManager.removeUpdates(locationListener);
 
     }
 
+
+    //다른 탭에서 TabMapActivity 탭으로 왔을 시에 실시간 사용자위치 검색 실시
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("다시시작해랏", "ㅁㅈㄷㄹ");
+
         requestMyLocation();
     }
 
@@ -179,6 +181,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
         tourbtn = (Button)findViewById(R.id.tourbtn);
 
+        //관광지버튼 클릭 시
         tourbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,6 +238,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
         homebtn = (Button)findViewById(R.id.homebtn);
 
+        //숙소버튼 클릭 시
         homebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -288,6 +292,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
         foodbtn = (Button)findViewById(R.id.foodbtn);
 
+        //음식점버튼 클릭 시
         foodbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,12 +404,10 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
         if(requestCode==1){
             //권한받음
             if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                Log.d("권한", "호출됐나요23");
                 requestMyLocation();
             }
             //권한못받음
             else{
-                Toast.makeText(this, "권한없음", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }
@@ -416,10 +419,10 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
             return;
         }
         //요청
-        Log.d("권한", "호출됐123123나요");
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, locationListener);
-        Log.d("권한12344", "호출완료한거니");
+
     }
 
     //위치정보 구하기 리스너
@@ -428,12 +431,12 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
         public void onLocationChanged(Location location) {
             if(ContextCompat.checkSelfPermission(TabMapActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(TabMapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                Log.d("리턴하니", "몰라요");
+
                 return;
             }
             //나의 위치를 한번만 가져오기 위해
             //
-            Log.d("권한", "들어오나요");
+
             //위도 경도
             mLatitude = location.getLatitude();   //위도
             mLongitude = location.getLongitude(); //경도
@@ -444,18 +447,21 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
                 googleMap.clear();
 
 
+                //관광지버튼이 OFF일때
                 if(tourbtn.getText().equals("OFF")){
                     for(int i=0; i< markerarray.length; i++){
                         markerarray[i].visible(true);
                         googleMap.addMarker(markerarray[i]);
                     }
                 }
+                //숙박버튼이 OFF일때
                 if(homebtn.getText().equals("OFF")){
                     for(int i=0; i<homemarker.length; i++){
                         homemarker[i].visible(true);
                         googleMap.addMarker(homemarker[i]);
                     }
                 }
+                //음식점버튼이 OFF일때
                 if(foodbtn.getText().equals("OFF")){
                     for(int i=0; i<foodmarker.length; i++){
                         foodmarker[i].visible(true);
@@ -463,6 +469,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
                     }
                 }
 
+                //3가지 버튼이 모두 ON일떼
                 if(tourbtn.getText().equals("ON") && homebtn.getText().equals("ON") && foodbtn.getText().equals("ON")){
                     if(mapSearchAdapter.getCount() > 0){
                         String si = spinnersi.getSelectedItem().toString();
@@ -474,6 +481,8 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
                     }
                 }
 
+
+            //실시간 내위치 마커등록
             LatLng mylocation = new LatLng(mLatitude, mLongitude);
 
             MarkerOptions markerOptions = new MarkerOptions();
@@ -498,6 +507,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
     };
 
 
+    //정보검색에 대한 검색버튼을 눌렀을 시 호출되는 함수
     private void addData(String si, String gu, String cate, String search) {
         //adapter.add(new Flower("제목", "내용", R.drawable.flower01, false));
 
@@ -741,6 +751,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
         }
     }
 
+    //구글맵에 공공데이터 정보를 마커로 표시하기 위함
     @Override
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
@@ -765,6 +776,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
         markerarray = new MarkerOptions[mapx.length];
 
+        //공공데이터 정보를 가져와 마커등록
         for(int i =0; i < mapx.length; i++){
 
             x[i] = Double.valueOf(mapx[i]);
@@ -773,11 +785,11 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
             LatLng location = new LatLng(y[i], x[i]);
 
             MarkerOptions markerOptions = new MarkerOptions();
-            markerOptions.position(location);
-            markerOptions.title(title[i]);
-            markerOptions.snippet(detail[i]);
-            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-            markerOptions.visible(false);
+            markerOptions.position(location); //마커위치
+            markerOptions.title(title[i]); //마커제목
+            markerOptions.snippet(detail[i]); //마커내용
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)); //마커 색깔
+            markerOptions.visible(false); //마커숨기기
 
             map.addMarker(markerOptions);
 
@@ -846,12 +858,13 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
         map.moveCamera(CameraUpdateFactory.newLatLng(SEOUL));
         map.animateCamera(CameraUpdateFactory.zoomTo(10));
     }
+    //서버에서 공공데이터 정보들을 가져오기 위함
     public class TourTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
 
 // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.100:8080/MapHack/android.mh");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.188:8080/MapHack/android.mh");
 
 // Parameter 를 전송한다.
 
@@ -875,6 +888,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
         protected void onPostExecute(String s) {
             responseData = s;
 
+            //JSON형태로 값을 가져와 정보들을 나눈다.
             try {
                 String list = null;
                 String detaillist = null;
@@ -932,6 +946,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
                     mapx[i] = jsonObject.getString("mapx");
                     mapy[i] = jsonObject.getString("mapy");
                     if(jsonObject.isNull("firstimage") == true){
+                        //해당 이미지가 없을 때 noimage파일을 불러온다.
                         firstimage[i] = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
                     }else{
                         firstimage[i] = jsonObject.getString("firstimage");
@@ -977,6 +992,7 @@ public class TabMapActivity extends Activity implements OnMapReadyCallback{
 
                 }
 
+                //맵에 마커들을 등록한다.
                 mapFragment.getMapAsync(TabMapActivity.this);
             } catch (JSONException e) {
                 e.printStackTrace();

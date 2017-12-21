@@ -20,10 +20,8 @@ import com.example.kosta.maphack.model.MapSearch;
 
 import java.util.List;
 
-/**
- * Created by kosta on 2017-12-08.
- */
 
+//일정에 대한 알람 리스트어댑터
 public class AlarmListAdapter extends ArrayAdapter<AlarmList>{
 
     Activity activity;

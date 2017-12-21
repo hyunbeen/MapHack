@@ -2,20 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.kosta.maphack">
 
+    <!--구글맵 위치 허용-->
     <permission
         android:name="com.example.kosta.maphack.locationapi.maps.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-
+    <!--구글맵 위치 허용-->
     <uses-permission android:name="com.example.kosta.maphack.locationapi.maps.permission.MAPS_RECEIVE" />
+    <!--인터넷 허용-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--현재위치 허용-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--핸드폰진동 허용-->
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--알람 허용-->
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
-
+<!--핸드폰 바탕화면 이미지와 이름 설정-->
     <application
         android:allowBackup="true"
         android:icon="@drawable/alarmlogo"
@@ -23,22 +29,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!--구글맵api를 사용하기위한 키 등록 설정-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDDCiO7L4z_JXWleLNLHbQ-8O5aH6WBPJs"/>
 
+        <!--스플래쉬 액티비티 호출-->
         <activity
             android:name=".StartActivity"
             android:theme="@style/StartTheme"
             android:screenOrientation="portrait">
-
+            <!--스플래쉬 액티비티 호출 후 메인엑티비티 실행-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <!--화면 전환을 위한 액티비티 설정-->
         <activity android:name=".MainActivity" android:configChanges="orientation|screenSize"></activity>
         <activity android:name=".TabHomeActivity"></activity>
         <activity android:name=".TabMapActivity"></activity>
@@ -50,6 +58,8 @@
         <activity android:name=".MyTravelActivity"></activity>
         <activity android:name=".MyTravelReviewActivity"></activity>
         <activity android:name=".MyTravelFavoriteActivity"></activity>
+        <activity android:name=".MyTravelModifyActivity"></activity>
+        <!--알람호출을 위한 리시버 등록-->
         <receiver android:name=".BroadcastD"></receiver>
     </application>
 </manifest>

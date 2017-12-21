@@ -1,10 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:id="@+id/linearlayouttraveldetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/btnBackTravel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="610dp"
+            android:background="@drawable/btnstyle"
+            android:text="이전으로"
+            android:textColor="#ffffff" />
+
+        <WebView
+            android:id="@+id/webViewtravel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.97"
+            android:scaleType="fitXY" />
+
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/textViewTravel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="여행짜기메뉴"/>
+        android:text="여행짜기 목록"
+        android:textAlignment="center"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:id="@+id/linearlayouttravel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/layoutstyle">
+
+        <in.srain.cube.views.GridViewWithHeaderAndFooter
+
+            android:id="@+id/listviewTravel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginBottom="10dp"
+            android:numColumns="2"
+            android:visibility="visible" />
+    </LinearLayout>
+
+
 </LinearLayout>

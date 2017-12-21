@@ -12,7 +12,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+//서버연결 함수
 public class HttpClient {
 
     private static final String WWW_FORM = "application/x-www-form-urlencoded";

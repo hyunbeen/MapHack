@@ -2,8 +2,6 @@ package com.example.kosta.maphack.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,14 +12,12 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.kosta.maphack.R;
 import com.example.kosta.maphack.model.After;
+import com.example.kosta.maphack.model.Travel;
 
-
-import java.net.URL;
 import java.util.List;
 
 
@@ -29,12 +25,12 @@ import java.util.List;
  * Created by kosta on 2017-10-25.
  */
 
-public class AfterAdapter extends ArrayAdapter<After> {
+public class TravelAdapter extends ArrayAdapter<Travel> {
     Activity activity; //화면을 구성하는 객체를 참조하는 클래스(객체)
     int resource; //화면을 구성하는 xml 파일을 찾는 아이디값
     CheckBox checkBox;
 
-    public AfterAdapter(@NonNull final Context context, @LayoutRes int resource, @NonNull List<After> objects) {
+    public TravelAdapter(@NonNull final Context context, @LayoutRes int resource, @NonNull List<Travel> objects) {
         super(context, resource, objects);
         this.resource = resource;
         activity = (Activity)context;
@@ -51,31 +47,30 @@ public class AfterAdapter extends ArrayAdapter<After> {
             //한줄 아이템 xml 파일을 읽어서 메모리 객체과정 => inflation
             itemView =  this.activity.getLayoutInflater().inflate(this.resource, null);
         }
-        final After item1 = getItem(position);
+        final Travel item1 = getItem(position);
 
         if(item1 != null){
-            WebView img1 = (WebView)itemView.findViewById(R.id.img1);
+            WebView myTravelImg1 = (WebView)itemView.findViewById(R.id.imgtravel1);
 
-            final TextView afterTitle1 = (TextView)itemView.findViewById(R.id.AfterTitle1);
+            final TextView myTravelTitle1 = (TextView)itemView.findViewById(R.id.AfterTitleTravel1);
 
             String imgurl = "";
             //no image 설정
-            if(item1.getAft_image().equals("")){
+            if(item1.getTravel_image().equals("")){
                 imgurl = "http://api.visitkorea.or.kr/static/images/common/noImage.gif";
             }else{
-                imgurl = "http://192.168.0.104:8080/MapHack/upload2/"+item1.getAft_image();
+                imgurl = "http://192.168.0.104:8080"+item1.getTravel_image();
             }
 
+            //listitem 설정
+            myTravelImg1.loadDataWithBaseURL(null, creHtmlBody(imgurl), "text/html", "utf-8", null);
+            myTravelImg1.setHorizontalScrollBarEnabled(false);
+            myTravelImg1.setWebViewClient(new WebViewClient());
+            myTravelImg1.setClickable(false);
+            myTravelImg1.setFocusable(false);
+            myTravelTitle1.setText(item1.getTravel_title());
 
 
-            img1.loadDataWithBaseURL(null, creHtmlBody(imgurl), "text/html", "utf-8", null);
-            img1.setHorizontalScrollBarEnabled(false);
-            img1.setWebViewClient(new WebViewClient());
-            img1.setClickable(false);
-            img1.setFocusable(false);
-            //webview 이미지 설정
-            afterTitle1.setText(item1.getAft_title());
-            //이미지 타이틀 설정
 
 
 
@@ -84,7 +79,6 @@ public class AfterAdapter extends ArrayAdapter<After> {
        /* return super.getView(position, convertView, parent);*/
         return itemView;
     }
-    //이미지 설정 함수
     public  String creHtmlBody(String imagUrl){
         StringBuffer sb = new StringBuffer("<HTML>");
         sb.append("<HEAD>");

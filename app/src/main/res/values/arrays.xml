@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="company">
-        <item>Samsung</item>
-        <item>Hyundai</item>
-        <item>LG</item>
-        <item>SK</item>
-        <item>KIA</item>
-    </string-array>
-
+    <!--TabMapActivity에 등록할 스피너(시) 아이템-->
     <string-array name="selectsi">
         <item>전체</item>
         <item>서울시</item>
     </string-array>
 
+    <!--TabMapActivity에 등록할 스피너(구) 아이템-->
     <string-array name="selectgu">
         <item>강남구</item>
         <item>강동구</item>
@@ -41,6 +35,7 @@
         <item>중랑구</item>
     </string-array>
 
+    <!--TabMapActivity에 등록할 스피너(카테고리) 아이템-->
     <string-array name="selectcate">
         <item>전체</item>
         <item>관광지</item>

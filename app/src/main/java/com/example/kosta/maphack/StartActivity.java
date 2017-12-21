@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-/**
- * Created by kosta on 2017-12-05.
- */
+
+//스플래쉬액티비티 화면 호출
 
 public class StartActivity extends Activity {
 
@@ -14,11 +13,13 @@ public class StartActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
 
+        //3초의 화면시간
         try{
             Thread.sleep(3000);
         }catch (Exception e){
             e.printStackTrace();
         }
+        //3초후 메인화면 출력
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }

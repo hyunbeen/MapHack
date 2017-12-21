@@ -37,6 +37,8 @@ import java.util.StringTokenizer;
  * Created by kosta on 2017-12-06.
  */
 
+
+//예정된 알림 보여주는 화면
 public class TabAlarmActivity extends Activity {
     ListView listView;
     List<AlarmList> list;
@@ -72,6 +74,7 @@ public class TabAlarmActivity extends Activity {
 
     String inputtitle[];
 
+    //로그인 체크를 하기위해 알람탭 클릭 시 요청
     @Override
     protected void onResume() {
         super.onResume();
@@ -85,25 +88,33 @@ public class TabAlarmActivity extends Activity {
             db = helper.getReadableDatabase();
         }
 
+        //내부디비에 아이디가 있는지 확인
         cursor = db.rawQuery("SELECT * FROM login;",null);
 
+        //등록된 아이디가 없다면 로그인액티비티 호출
         if(cursor.moveToNext() == false){
 
             Intent intent = new Intent(this, LoginActivity.class);
 
             this.startActivity(intent);
         }else{
+            //등록된 아이디가 없다면
 
+            //내부디비에 저장된 아이디값 가져오기
             id = cursor.getString(1);
             Log.d("id", id);
 
+
+            //저장된 배열 초기화(값이 쌓이기 때문)
             alarm.clear();
             alarmtitle.clear();
 
+
+            //알람 예정 리스트 출력을 위해 서버에서 값 받아오기
             TourTask tourTask = new TourTask();
 
             Map<String, String> params = new HashMap<String, String>();
-            Log.d("id123123", id);
+            //서버로 id값을 보냄
             params.put("id", id);
 
             tourTask.execute(params);
@@ -120,12 +131,13 @@ public class TabAlarmActivity extends Activity {
 
     }
 
+    //서버로 가서 값 가져오기
     public class TourTask extends AsyncTask<Map<String, String>, Integer, String> {
         @Override
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
 
 // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.100:8080/MapHack/androidalarm.mh");
+            HttpClient.Builder http = new HttpClient.Builder("POST", "http://192.168.0.188:8080/MapHack/androidalarm.mh");
 
 // Parameter 를 전송한다.
 
@@ -147,15 +159,14 @@ public class TabAlarmActivity extends Activity {
 
         @Override
         protected void onPostExecute(String s) {
+            //요청값을 담음
             responseData = s;
-
-            Log.d("와랏", s);
-
 
 
             String alarmtime[];
             String title[];
 
+            //JSON형태로 가져온 것들을 String배열에 담음
             try {
                 JSONObject object = new JSONObject(responseData);
                 alarmlist = object.getString("travelmaplist");
@@ -176,21 +187,25 @@ public class TabAlarmActivity extends Activity {
                     Log.d("map_title", totaltitle[i]);
                 }
 
+                //이미지를 호출하기위한 url을 만들기 위함
                 for(int i=0; i<totalimage.length; i++){
-                    totalimage[i] = "http://192.168.0.100:8080"+totalimage[i];
+                    totalimage[i] = "http://192.168.0.188:8080"+totalimage[i];
                     Log.d("totalimage", totalimage[i]);
                 }
                 countlist = new int[detaillist.length];
 
+
+                //현재시간을 가져오기 위함
                 Calendar calendar = Calendar.getInstance();
                 SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMddHHmm");
 
                 String datetime1 = sdf1.format(calendar.getTime());
 
 
+                //현재시간을 기점으로 후에 울릴 알람만을 보여주기 위함
                 for (int i=0; i<detaillist.length; i++){
                     count = 0;
-                    Log.d("길이", ""+detaillist.length);
+
                     JSONArray array1 = new JSONArray(detaillist[i]);
                     for(int j=0; j<array1.length(); j++){
                         JSONObject jsonObject = array1.getJSONObject(j);
@@ -199,20 +214,26 @@ public class TabAlarmActivity extends Activity {
                         for(int k=0; k<jsonArray.length(); k++){
 
                             JSONObject jsonObject1 = jsonArray.getJSONObject(k);
-                            Log.d("알람123", i+" "+k+" "+jsonObject1.getString("time"));
+
                             String y;
                             String dm;
                             String d;
                             String h;
                             String m;
+                            String datetime2= "0";
                             StringTokenizer stringTokenizer = new StringTokenizer(jsonObject1.getString("time"), "-");
-                                y = stringTokenizer.nextToken();
-                                dm = stringTokenizer.nextToken();
-                                d = stringTokenizer.nextToken();
-                                h = stringTokenizer.nextToken();
-                                m = stringTokenizer.nextToken();
-                                String datetime2 = y+dm+d+h+m;
+                                if(stringTokenizer.hasMoreTokens()){
+                                    y = stringTokenizer.nextToken();
+                                    dm = stringTokenizer.nextToken();
+                                    d = stringTokenizer.nextToken();
+                                    h = stringTokenizer.nextToken();
+                                    m = stringTokenizer.nextToken();
+                                    datetime2 = "";
+                                    datetime2 = y+dm+d+h+m;
+                                }
 
+
+                            //int형의 범위를 벗어나므로 long형 사용
 
                             if (Long.parseLong(datetime1) < Long.parseLong(datetime2)){
 
@@ -231,13 +252,6 @@ public class TabAlarmActivity extends Activity {
                     Log.d("countlist", ""+countlist[i]);
 
                 }
-                for(int i=0; i<alarm.size(); i++){
-                    Log.d("알람시간", alarm.get(i));
-                    Log.d("알람제목", alarmtitle.get(i));
-                    Log.d("알람내용", alarmdetailcontent.get(i));
-                    Log.d("알람이미지", alarmdetailimage.get(i));
-                }
-
 
                 listView = (ListView)findViewById(R.id.alarmlist);
 
@@ -248,6 +262,7 @@ public class TabAlarmActivity extends Activity {
 
                 alarmdetailcount.clear();
 
+                //한 일정에 관해 등록된 일정이 몇개인지 보여줌
                 for (int i=0; i<totaltitle.length; i++){
                     if(countlist[i] != 0){
                         alarmListAdapter.add(new AlarmList(totaltitle[i], "등록된 알림 "+countlist[i]+" 개", totalimage[i]));
@@ -256,6 +271,7 @@ public class TabAlarmActivity extends Activity {
                     }
 
                 }
+                //리스트뷰에 항목을 클릭 시 해당 항목에 알림 갯수에 대한 세부알림일정을 보여줌
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -286,6 +302,8 @@ public class TabAlarmActivity extends Activity {
                 stHour = new int[alarm.size()];
                 stMinute = new int[alarm.size()];
 
+
+                //알람을 등록하기 위해 받은 년,월,일,시,분을 나눠서 배열에 저장
                 for(int i=0; i< alarm.size(); i++){
                     StringTokenizer stringTokenizer = new StringTokenizer(alarm.get(i), "-");
                     if(stringTokenizer.hasMoreTokens()){
@@ -300,6 +318,7 @@ public class TabAlarmActivity extends Activity {
 
                 inputtitle = new String[alarm.size()];
 
+                //알람 갯수만큼 AlarmHATT 호출
                 new AlarmHATT(getApplicationContext()).Alarm(alarm.size());
 
             } catch (JSONException e) {
@@ -309,6 +328,7 @@ public class TabAlarmActivity extends Activity {
 
         }
     }
+    //알람을 보내는 함수
     public class AlarmHATT {
         private Context context;
 
@@ -321,17 +341,18 @@ public class TabAlarmActivity extends Activity {
 
         public void Alarm(int count) {
             // Log.d("븐", ""+a);
+
             PendingIntent[] sender = new PendingIntent[count];
+
+            //세부알람에 대한 일정타이틀을 넣어줌
             for(int i=0; i<countlist.length; i++){
                 last += countlist[i];
-
                 for(int j=first; j<last; j++){
                     inputtitle[j] = totaltitle[i];
-                    Log.d("타이틀넣기"+j+"번째 ", inputtitle[j]);
                 }
-
                 first += countlist[i];
             }
+            //알람 갯수만큼 알람시간 설정
             for(int i=0; i < count; i++){
                 AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                 Intent intent = new Intent(TabAlarmActivity.this, BroadcastD.class);
@@ -341,14 +362,10 @@ public class TabAlarmActivity extends Activity {
 
                 Calendar calendar = Calendar.getInstance();
                 //알람시간 calendar에 set해주기
-
                 calendar.set(stYear[i], stMonth[i]-1, stDay[i], stHour[i], stMinute[i]);
-                Log.d("calendar", calendar.get(Calendar.MONTH)+ ";"+calendar.get(Calendar.DATE)+";"+calendar.get(Calendar.HOUR));
                 //알람 예약
                 am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), sender[i]);
             }
-
-
         }
     }
 }

@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+//탭리스트 생성
 public class MainActivity extends TabActivity {
     TabHost mTab;
 
@@ -38,9 +39,11 @@ public class MainActivity extends TabActivity {
         setContentView(R.layout.activity_main);
 
 
-        manager=(LocationManager)getSystemService(LOCATION_SERVICE);
 
+        manager=(LocationManager)getSystemService(LOCATION_SERVICE);
+        //위치 정보를 허용하기위함
         if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            //위치 정보를 허용 / 거부를 선택하는 알림창을 띄움
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 100);
         }else {
             getProviders();
@@ -60,6 +63,7 @@ public class MainActivity extends TabActivity {
         TabHost.TabSpec tabSpecTab2 = tabHost.newTabSpec("TAB2").setIndicator("",getResources().getDrawable(R.drawable.map));
         tabSpecTab2.setContent(intent);
         tabHost.addTab(tabSpecTab2);
+        //TabMapActivity에 현재위치 좌표값 전송
         intent.putExtra("mLat",mLat);
         intent.putExtra("mLng",mLng);
 
@@ -78,9 +82,11 @@ public class MainActivity extends TabActivity {
         tabSpecTab5.setContent(intent);
         tabHost.addTab(tabSpecTab5);
 
+        //실행했을 시 시작화면이 TabListActivity를 보여줌
         tabHost.setCurrentTab(2);
 
     }
+    //위치 허용을 선택
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -93,6 +99,7 @@ public class MainActivity extends TabActivity {
             }
         }
     }
+    //위치 허용이 되지않았을 때
     private void showToast(String message){
         Toast toast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
         toast.show();
@@ -111,6 +118,7 @@ public class MainActivity extends TabActivity {
             result += provider+",";
         }
     }
+    //현재 나의 위치 가져오기
     private void getLocation(){
         //add~~~~~~~~~~~~~
         for(String provider : enabledProviders){
@@ -134,13 +142,13 @@ public class MainActivity extends TabActivity {
             }
         }
     }
+    //전역 변수에 x, y좌표 값 넣기
     private void setLocationInfo(String provider, Location location){
         //add~~~~~~~~~~~~~~~~
         if(location != null){
 
             mLat = String.valueOf(location.getLatitude());
             mLng = String.valueOf(location.getLongitude());
-
 
         }else {
             showToast("location null");

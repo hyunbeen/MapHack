@@ -20,10 +20,9 @@ import com.example.kosta.maphack.model.DetailAlarmList;
 
 import java.util.List;
 
-/**
- * Created by kosta on 2017-12-08.
- */
 
+
+//일정에대한 세부알람내용에대한 리스트어댑터
 public class DetailAlarmListAdapter extends ArrayAdapter<DetailAlarmList>{
 
     Activity activity;

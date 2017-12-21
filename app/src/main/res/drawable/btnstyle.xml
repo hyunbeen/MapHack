@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--버튼에 대한 스타일 지정-->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--버튼 색깔-->
     <solid android:color="#29293a"/>
+    <!--버튼 모양(둥근정도)-->
     <corners android:radius="10dip"/>
     <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
 </shape>

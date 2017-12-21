@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by kosta on 2017-12-11.
  */
 
+//핸드폰 내부디비를 생성하는 함수
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Maphack.db";
     private static final int DATABASE_VERSION = 2;
@@ -19,6 +20,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db){
+        //테이블 생성
         db.execSQL("CREATE TABLE login (_id INTEGER PRIMARY KEY AUTOINCREMENT, id TEXT);");
     }
 
